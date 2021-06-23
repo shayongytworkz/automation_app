@@ -1,9 +1,10 @@
-// @dart=2.9
 import 'package:flutter/material.dart';
 import 'package:gateway/gateway.dart';
 import 'package:test_app/screens/getIp.dart';
 import 'package:flutter_icmp_ping/flutter_icmp_ping.dart';
 import 'package:ping_discover_network/ping_discover_network.dart';
+import 'package:test_app/wifiPage.dart';
+import 'package:wifi/wifi.dart';
 
 void main() {
   runApp(MyApp());
@@ -41,8 +42,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   startPing() async {
     try {
+      //! icmp ping to host
       ping = Ping(
-        'google.com',
+        'tanmoykarmakar.in', //!host name getting converted to ip
         count: 3,
         timeout: 1,
         interval: 1,
@@ -57,8 +59,26 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   gateway() async {
+//  ip:192.168.29.1
+//  localIP:192.168.29.85
+//  netmask:255.255.255.0
+//  broadcast:192.168.29.255
+
     Gateway gt = await Gateway.info;
     print(gt);
+  }
+
+  getNetworkDevices() async {
+    final String ip = await Wifi.ip;
+    final String subnet = ip.substring(0, ip.lastIndexOf('.'));
+    final int port = 80;
+
+    final stream = NetworkAnalyzer.discover2(subnet, port);
+    stream.listen((NetworkAddress addr) {
+      if (addr.exists) {
+        print('Found device: ${addr.ip}');
+      }
+    });
   }
 
   @override
@@ -101,7 +121,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               TextButton(
-                onPressed: startPing,
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WifiPage(),
+                    )),
                 style: TextButton.styleFrom(backgroundColor: Colors.blue),
                 child: Text(
                   'Click Me',

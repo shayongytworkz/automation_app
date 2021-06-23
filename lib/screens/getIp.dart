@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:wifi/wifi.dart';
-import 'package:gateway/gateway.dart';
 
 class IpPage extends StatefulWidget {
-  const IpPage({Key? key}) : super(key: key);
+  const IpPage({Key key}) : super(key: key);
 
   @override
   _IpPageState createState() => _IpPageState();
 }
 
 class _IpPageState extends State<IpPage> {
-  String? ip;
-  String? ipAddress;
-  String? subnet;
+  String ip;
+  String ipAddress;
+  String subnet;
   int port = 80;
 
   getIp() async {
