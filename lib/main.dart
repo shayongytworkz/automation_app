@@ -1,7 +1,7 @@
 // @dart=2.9
 import 'package:flutter/material.dart';
-import 'package:wifi/wifi.dart';
 import 'package:gateway/gateway.dart';
+import 'package:test_app/screens/getIp.dart';
 import 'package:flutter_icmp_ping/flutter_icmp_ping.dart';
 import 'package:ping_discover_network/ping_discover_network.dart';
 
@@ -56,20 +56,9 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  getIp() async {
-    ip = await Wifi.ip;
+  gateway() async {
     Gateway gt = await Gateway.info;
     print(gt);
-    // final stream = NetworkAnalyzer.discover2(subnet, port);
-    // stream.listen((NetworkAddress addr) {
-    //   if (addr.exists) {
-    //     print('Found device: ${addr.ip}');
-    //   }
-    // });
-    print(ip);
-    setState(() {
-      ipAddress = ip;
-    });
   }
 
   @override
@@ -79,15 +68,48 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              '$ipAddress',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            TextButton(onPressed: startPing, child: Text('Click Me'))
-          ],
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (builder) => IpPage()));
+                },
+                style: TextButton.styleFrom(backgroundColor: Colors.blue),
+                child: Text(
+                  'get Ip',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              TextButton(
+                onPressed: startPing,
+                style: TextButton.styleFrom(backgroundColor: Colors.blue),
+                child: Text(
+                  'Network Devices',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              TextButton(
+                onPressed: gateway,
+                style: TextButton.styleFrom(backgroundColor: Colors.blue),
+                child: Text(
+                  'Gateway',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              TextButton(
+                onPressed: startPing,
+                style: TextButton.styleFrom(backgroundColor: Colors.blue),
+                child: Text(
+                  'Click Me',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
