@@ -28,6 +28,9 @@ dependencies:
   gateway: null
   ping_discover_network: null
   wifi: ^0.1.5
+  dart_ping: ^6.0.0
+  flutter_nsd: ^1.1.0
+  multicast_dns: ^0.3.0
 
 dev_dependencies:
   flutter_test:

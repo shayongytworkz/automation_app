@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:wifi/wifi.dart';
+import 'package:dart_ping/dart_ping.dart';
 
 class IpPage extends StatefulWidget {
   const IpPage({Key key}) : super(key: key);
@@ -21,6 +24,15 @@ class _IpPageState extends State<IpPage> {
     });
   }
 
+  ping() {
+    // Socket.connect(IPADDR, PORT, timeout: Duration(seconds: 5)).then((socket) {
+    //   print("Success");
+    //   socket.destroy();
+    // }).catchError((error) {
+    //   print("Exception on Socket " + error.toString());
+    // });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +45,7 @@ class _IpPageState extends State<IpPage> {
           children: [
             Text('$ipAddress'),
             TextButton(
-              onPressed: getIp,
+              onPressed: ping,
               child: Text(
                 'getIp',
                 style: TextStyle(color: Colors.white),

@@ -1,12 +1,34 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gateway/gateway.dart';
+import 'package:test_app/screens/devices.dart';
+import 'package:test_app/screens/getDevices.dart';
 import 'package:test_app/screens/getIp.dart';
 import 'package:flutter_icmp_ping/flutter_icmp_ping.dart';
 import 'package:ping_discover_network/ping_discover_network.dart';
-import 'package:test_app/wifiPage.dart';
+import 'package:test_app/screens/mdns.dart';
+import 'package:test_app/screens/wifiPage.dart';
 import 'package:wifi/wifi.dart';
 
-void main() {
+void main() async {
+  // Socket socket = await Socket.connect('192.168.1.29', 80);
+  // print('connected');
+
+  // // listen to the received data event stream
+  // socket.listen((List<int> event) {
+  //   print(utf8.decode(event));
+  // });
+
+  // // send hello
+  // socket.add(utf8.encode('hello'));
+
+  // // wait 5 seconds
+  // await Future.delayed(Duration(seconds: 5));
+
+  // // .. and close the socket
+  // socket.close();
   runApp(MyApp());
 }
 
@@ -71,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
   getNetworkDevices() async {
     final String ip = await Wifi.ip;
     final String subnet = ip.substring(0, ip.lastIndexOf('.'));
-    final int port = 80;
+    final int port = 9100;
 
     final stream = NetworkAnalyzer.discover2(subnet, port);
     stream.listen((NetworkAddress addr) {
@@ -79,6 +101,13 @@ class _MyHomePageState extends State<MyHomePage> {
         print('Found device: ${addr.ip}');
       }
     });
+
+    // final stream = NetworkAnalyzer.discover2(subnet, port);
+    // stream.listen((NetworkAddress addr) {
+    //   if (addr.exists) {
+    //     print('Found device: ${addr.ip}');
+    //   }
+    // });
   }
 
   @override
@@ -90,8 +119,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextButton(
                 onPressed: () {
@@ -124,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => WifiPage(),
+                      builder: (context) => Mdns(),
                     )),
                 style: TextButton.styleFrom(backgroundColor: Colors.blue),
                 child: Text(

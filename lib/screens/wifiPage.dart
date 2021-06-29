@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wifi/wifi.dart';
+import 'package:ping_discover_network/ping_discover_network.dart';
 
 class WifiPage extends StatefulWidget {
   @override
@@ -96,8 +97,8 @@ class _WifiPageState extends State<WifiPage> {
     } else {
       return Column(children: <Widget>[
         ListTile(
-          leading: Image.asset('images/wifi${ssidList[index - 1].level}.png',
-              width: 28, height: 21),
+          // leading: Image.asset('images/wifi${ssidList[index - 1].level}.png',
+          //     width: 28, height: 21),
           title: Text(
             ssidList[index - 1].ssid,
             style: TextStyle(
@@ -139,6 +140,17 @@ class _WifiPageState extends State<WifiPage> {
   Future<Null> connection() async {
     Wifi.connection(ssid, password).then((v) {
       print(v);
+    });
+    // List devices = await Wifi.list("");
+    final String ip = await Wifi.ip;
+    final String subnet = ip.substring(0, ip.lastIndexOf('.'));
+    final int port = 8000;
+
+    final stream = NetworkAnalyzer.discover(subnet, port);
+    stream.listen((NetworkAddress addr) {
+      if (addr.exists) {
+        print('Found device: ${addr.ip}');
+      }
     });
   }
 }
